@@ -28,7 +28,7 @@ Project objectives:
 
 ### Task 1: Extract due
 
-- **Check and extract** from Totesys PostGRES Database → S3 - MAX 30 MINUTES
+- **Check and extract** from Totesys PostGRES Database to an S3 bucket at maximum intervals of 30 minutes.
 
 ### Task 2: Infrastructure Setup
 
@@ -44,9 +44,8 @@ Project objectives:
 - Lambda function to extract data:
   - Initially upload all tables to the bucket, later upload modifications of database to the bucket.
   - Upload as **JSON files**.
-  - Database may not change every 5 minutes leading to duplication of ingested data - this is wrong as we are only taking the delta.
-  - Data in the database is modified (e.g., a transaction gets changed or cancelled).
-  - Need to keep history of every modification and new data in Totesys DB by using **timestamps**.
+  - Database may not change every 5 minutes, but duplication is avoided by only taking the delta.  
+  - Data in the database is modified (e.g., a transaction gets changed or cancelled), and a history of every modification and new data in Totesys DB by using **timestamps**.
 - Extraction triggers a message to **CloudWatch**.
 - All errors and status are logged to **CloudWatch**:
   - CloudWatch will send an email in case of a major error.
@@ -55,7 +54,7 @@ Project objectives:
 
 ### Task 1: Transform Lambda Function
 
-- Transform Lambda function triggers every time there is new data in the Ingestion bucket.
+- AWS Transform Lambda function triggers every time there is new data in the Ingestion bucket.
 - **Pass the transformed data** to the Processed Data Bucket.
 
 ### Task 2: OLTP → OLAP Transformation Schema
