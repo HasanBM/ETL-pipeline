@@ -10,6 +10,7 @@ PYTHON_INTERPRETER = python
 SHELL := /bin/bash
 PROFILE = default
 PIP := pip
+PYSPARK_VERSION=3.4.1
 
 # Define the source directories
 SRC_DIRS := src/extract_lambda src/transform_lambda src/load_lambda
@@ -44,6 +45,7 @@ requirements: create-environment
 	$(call execute_in_env, $(PIP) install pip-tools)
 	$(call execute_in_env, pip-compile requirements.in)
 	$(call execute_in_env, $(PIP) install -r ./requirements.txt)
+	$(call execute_in_env, $(PIP) install pyspark==$(PYSPARK_VERSION))
 
 ################################################################################################################
 # Set Up
@@ -126,4 +128,8 @@ clean:
 pdocs:
 	export PYTHONPATH=src/extract_lambda:src/transform_lambda:src/load_lambda
 	$(call execute_in_env, pdoc -o docs src/*/*.py)
+
+## Create PySpark Shell
+pyspark-shell:
+	$(call execute_in_env, pyspark)
 	
